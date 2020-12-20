@@ -1,5 +1,4 @@
 const knex = require("knex");
-const supertest = require("supertest");
 const app = require("../src/app");
 const helpers = require("./test-helpers");
 
@@ -26,17 +25,6 @@ describe("Reviews Endpoints", function () {
     beforeEach("insert things", () =>
       helpers.seedThingsTables(db, testUsers, testThings)
     );
-
-    it(`responds with 401 'Unauthorized request' when invalid password`, () => {
-      const userInvalidPassword = {
-        user_name: testUsers[0].user_name,
-        password: "wrong-o",
-      };
-      return supertest(app)
-        .post("/api/reviews")
-        .set("Authorization", helpers.makeAuthHeader(userInvalidPassword))
-        .expect(401, { error: "Unauthorized request" });
-    });
 
     it(`creates an review, responding with 201 and the new review`, function () {
       this.retries(3);
